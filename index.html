@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HTML ➜ Sketch</title>
+    <link rel="stylesheet" href="src/styles.css" />
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <script type="module">
+      import { createApp, ref, onMounted } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js';
+      import { HtmlToSketchConverter } from './src/html-to-sketch.js';
+
+      const App = {
+        setup() {
+          const iframeLoaded = ref(false);
+          const isGenerating = ref(false);
+          const statusMessage = ref('');
+          const converter = new HtmlToSketchConverter();
+          const iframeRef = ref(null);
+
+          const handleLoad = () => {
+            iframeLoaded.value = true;
+            statusMessage.value = '联系人界面已经加载，可以生成 Sketch 文件。';
+          };
+
+          const handleGenerate = async () => {
+            const iframeEl = iframeRef.value;
+            if (!iframeEl || !iframeEl.contentDocument) {
+              statusMessage.value = '无法访问联系人界面，请稍后重试。';
+              return;
+            }
+
+            isGenerating.value = true;
+            statusMessage.value = '正在分析 HTML 并生成 Sketch 文件…';
+
+            try {
+              const { blob, filename } = await converter.convertDocument(
+                iframeEl.contentDocument,
+                {
+                  viewportWidth: iframeEl.clientWidth,
+                  viewportHeight: iframeEl.clientHeight,
+                  filename: 'contacts.sketch'
+                }
+              );
+
+              const link = document.createElement('a');
+              link.href = URL.createObjectURL(blob);
+              link.download = filename;
+              link.click();
+              URL.revokeObjectURL(link.href);
+
+              statusMessage.value = 'Sketch 文件生成成功，已开始下载。';
+            } catch (error) {
+              console.error(error);
+              statusMessage.value = '生成 Sketch 文件时出现问题，请检查控制台日志。';
+            } finally {
+              isGenerating.value = false;
+            }
+          };
+
+          onMounted(() => {
+            statusMessage.value = '等待联系人界面加载…';
+          });
+
+          return {
+            iframeLoaded,
+            iframeRef,
+            isGenerating,
+            statusMessage,
+            handleLoad,
+            handleGenerate
+          };
+        },
+        template: `
+          <main class="layout">
+            <section class="layout__preview">
+              <header class="layout__preview-header">
+                <h1>联系人预览</h1>
+                <p>左侧展示联系人 HTML 页面，右侧工具用于导出 Sketch。</p>
+              </header>
+              <iframe
+                ref="iframeRef"
+                id="contact-frame"
+                class="layout__iframe"
+                src="./contact-list.html"
+                title="联系人列表"
+                @load="handleLoad"
+              ></iframe>
+            </section>
+            <aside class="layout__tools">
+              <h2>工具面板</h2>
+              <p class="layout__status">{{ statusMessage }}</p>
+              <button
+                class="layout__button"
+                :disabled="!iframeLoaded || isGenerating"
+                @click="handleGenerate"
+              >
+                {{ isGenerating ? '生成中…' : '生成 Sketch' }}
+              </button>
+              <p class="layout__hint">
+                提示：下载的 Sketch 文件遵循 <code>sketch-constructor</code> 项目公开的文件结构，
+                可以直接在 Sketch 中打开进行调整。
+              </p>
+            </aside>
+          </main>
+        `
+      };
+
+      createApp(App).mount('#app');
+    </script>
+  </body>
+</html>

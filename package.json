@@ -1,0 +1,10 @@
+{
+  "name": "html2sketch",
+  "private": true,
+  "version": "0.1.0",
+  "description": "HTML to Sketch converter demo",
+  "type": "module",
+  "scripts": {
+    "start": "python3 -m http.server 4173"
+  }
+}

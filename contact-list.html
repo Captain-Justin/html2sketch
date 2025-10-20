@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Contacts</title>
+    <style>
+      :root {
+        font-family: "Segoe UI", Arial, sans-serif;
+        background: #f5f7fb;
+      }
+
+      body {
+        margin: 0;
+        padding: 24px;
+        background: #f5f7fb;
+      }
+
+      h1 {
+        font-size: 20px;
+        margin: 0 0 16px;
+        color: #1f2933;
+      }
+
+      .contact-card {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 16px;
+        margin-bottom: 12px;
+        border-radius: 12px;
+        background: #fff;
+        box-shadow: 0 3px 10px rgba(15, 23, 42, 0.08);
+      }
+
+      .contact-card:last-child {
+        margin-bottom: 0;
+      }
+
+      .contact-avatar {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #60a5fa, #2563eb);
+        color: white;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+      }
+
+      .contact-info {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .contact-name {
+        font-weight: 600;
+        color: #0f172a;
+      }
+
+      .contact-meta {
+        font-size: 13px;
+        color: #475569;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Product Team</h1>
+    <section>
+      <article class="contact-card">
+        <span class="contact-avatar">AL</span>
+        <div class="contact-info">
+          <span class="contact-name">Alex Li</span>
+          <span class="contact-meta">Product Manager · alex@example.com</span>
+        </div>
+      </article>
+      <article class="contact-card">
+        <span class="contact-avatar">RM</span>
+        <div class="contact-info">
+          <span class="contact-name">Rina Malik</span>
+          <span class="contact-meta">UX Research · rina@example.com</span>
+        </div>
+      </article>
+      <article class="contact-card">
+        <span class="contact-avatar">JT</span>
+        <div class="contact-info">
+          <span class="contact-name">Jordan Tate</span>
+          <span class="contact-meta">Design Lead · jordan@example.com</span>
+        </div>
+      </article>
+      <article class="contact-card">
+        <span class="contact-avatar">CS</span>
+        <div class="contact-info">
+          <span class="contact-name">Carmen Sandoval</span>
+          <span class="contact-meta">Engineer · carmen@example.com</span>
+        </div>
+      </article>
+    </section>
+  </body>
+</html>
